@@ -11,7 +11,7 @@ def create_qrcodes(filename):
             first_part_of_line = line.split(",")[0]
             name_of_file = first_part_of_line + '.png'
             link_to_launch = line.split(",")[1]
-            print(">> Generating: " +name_of_file + " that goes to: " +link_to_launch)
+            print(">> Generating: " +name_of_file + " that has data: " +link_to_launch)
             qrcode = segno.make_qr(link_to_launch)
             qrcode.save(
                 name_of_file,
