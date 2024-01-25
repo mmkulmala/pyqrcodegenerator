@@ -40,7 +40,7 @@ def add_caption(caption_to, caption_what):
 
 def main():
     if(len(sys.argv) != 2):
-        print("Usage: python3 make_qrcodes.py <artists-text-file>")
+        print("Usage: python3 make_qrcodes.py <info-text-file>")
         sys.exit(1)
     create_qrcodes(sys.argv[1])
 
