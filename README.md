@@ -8,7 +8,7 @@ This Python program uses following libs:
 3.) Image, ImageDrwa and ImageFont from PIL lib to draw text to QR-code
 
 ## How to
-First install needed libs and then create a text file with file names and text to add to QR-code. Running is as simple as: python3 make_qr.py sometextfile.txt
+First install needed libs and then create a text file with file names and text to add to QR-code. Running is as simple as: python3 make_qr.py sometextfile.txt optional_font_file<.ttf/ttc>
 
 
 
