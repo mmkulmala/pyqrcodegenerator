@@ -3,7 +3,7 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 """
-Create QR codes from a file with the specified filename and an optional font file name.
+Create QR codes from a file with the specified filename and an optional font file name as well as scale of code.
 """
 def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
     get_qrcode_amount(filename)
