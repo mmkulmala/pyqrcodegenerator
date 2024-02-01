@@ -11,18 +11,30 @@ def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
     with open(filename) as artist_file:
         n = 1
         for line in artist_file:
-            first_part_of_line = line.split(",")[0]
+            data_from_line = line.split(",")
+            first_part_of_line = data_from_line[0]
             name_of_file = first_part_of_line + '.png'
-            link_to_launch = line.split(",")[1]
-            print(">> Generating: " +name_of_file + " that goes to: " +link_to_launch)
+            link_to_launch = data_from_line[1]
+            font_size: int = 12
+            text_position: int = 20
+            qr_image_scale: int = 4
+            print('rivin koko: ' + str(len(data_from_line)))
+            try:
+                qr_image_scale = int(data_from_line[2])
+                font_size = qr_image_scale * 3
+                text_position = int(font_size * 1.67)
+                print('>> Generating with default image size: scale ' + str(qr_image_scale) + ' , font size ' + str(font_size) + ', text position ' + str(text_position))
+            except IndexError:
+                print(">> Generating with default image size: scale 4, font size 12, text position 20")
+            print(">>> Generating: " + name_of_file + " that goes to: " + link_to_launch)
             qrcode = segno.make_qr(link_to_launch)
             qrcode.save(
                 name_of_file,
-                scale=4,
+                scale=qr_image_scale,
                 border=5,
                 light=None,
             )
-            add_caption(name_of_file, first_part_of_line, fontFileName)
+            add_caption(name_of_file, first_part_of_line, fontFileName, font_size, text_position)
             n += 1
 
 """
@@ -33,16 +45,16 @@ Args:
 
 Returns:
     None
-""" 
+"""
 def get_qrcode_amount(file_name):
     with open(file_name, 'r') as fp:
         x = len(fp.readlines())
         print('####################################################')
-        print('# Generating ' + str(x) + ' qr-codes                            #')   
+        print('# Generating ' + str(x) + ' qr-codes                            #')
         print('####################################################')
 
 """
-Adds a caption to the specified image using the provided caption and font. 
+Adds a caption to the specified image using the provided caption and font.
 
 Args:
     caption_to (str): The path to the image to which the caption should be added.
@@ -52,14 +64,14 @@ Args:
 Returns:
     None
 """
-def add_caption(caption_to, caption_what, fontFileName):
+def add_caption(caption_to, caption_what, fontFileName, font_size, text_position):
     image = Image.open(caption_to)
     width, height = image.size
     draw = ImageDraw.Draw(image)
     text_seat = caption_what
-    font = ImageFont.truetype(fontFileName, 12)
-    draw.text((20,height - 20), text_seat, font=font)
-    image.save(caption_to)   
+    font = ImageFont.truetype(fontFileName, font_size)
+    draw.text((text_position,height - text_position), text_seat, font=font)
+    image.save(caption_to)
 
 """
 This function is the main entry point of the program. It checks the command line arguments
