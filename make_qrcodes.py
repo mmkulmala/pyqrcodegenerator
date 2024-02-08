@@ -1,24 +1,27 @@
 import segno
 import sys
+import os
+import glob
 from PIL import Image, ImageDraw, ImageFont
 
 """
-Create QR codes from a file with the specified filename and an optional font file name as well as scale of code.
+Create QR codes from a file with the specified filename and an optional font file name.
 """
 def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
     get_qrcode_amount(filename)
+    create_folder_if_not_exists()
+    clear_folder()
 
     with open(filename) as artist_file:
         n = 1
         for line in artist_file:
             data_from_line = line.split(",")
             first_part_of_line = data_from_line[0]
-            name_of_file = first_part_of_line + '.png'
+            name_of_file = './qrcodes/'+ first_part_of_line + '.png'
             link_to_launch = data_from_line[1]
             font_size: int = 12
             text_position: int = 20
             qr_image_scale: int = 4
-            print('rivin koko: ' + str(len(data_from_line)))
             try:
                 qr_image_scale = int(data_from_line[2])
                 font_size = qr_image_scale * 3
@@ -52,6 +55,24 @@ def get_qrcode_amount(file_name):
         print('####################################################')
         print('# Generating ' + str(x) + ' qr-codes                            #')
         print('####################################################')
+
+"""
+Delete all text files in the 'qrcodes' folder.
+"""
+def clear_folder():
+    files = glob.glob('./qrcodes/*.png')
+    for f in files:
+        os.remove(f)
+
+"""
+Create a folder if it does not already exist.
+"""
+def create_folder_if_not_exists():
+    try:
+        os.makedirs("qrcodes")
+    except FileExistsError:
+        print(">>> qrcodes exists")
+        pass
 
 """
 Adds a caption to the specified image using the provided caption and font.
