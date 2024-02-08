@@ -57,7 +57,7 @@ def get_qrcode_amount(file_name):
         print('####################################################')
 
 """
-Delete all text files in the 'qrcodes' folder.
+Delete all qr-codes in the 'qrcodes' folder.
 """
 def clear_folder():
     files = glob.glob('./qrcodes/*.png')
