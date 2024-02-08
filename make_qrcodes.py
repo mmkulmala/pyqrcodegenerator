@@ -26,7 +26,7 @@ def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
                 qr_image_scale = int(data_from_line[2])
                 font_size = qr_image_scale * 3
                 text_position = int(font_size * 1.67)
-                print('>> Generating with default image size: scale ' + str(qr_image_scale) + ' , font size ' + str(font_size) + ', text position ' + str(text_position))
+                print('>> Generating with image size: scale ' + str(qr_image_scale) + ' , font size ' + str(font_size) + ', text position ' + str(text_position))
             except IndexError:
                 print(">> Generating with default image size: scale 4, font size 12, text position 20")
             print(">>> Generating: " + name_of_file + " that goes to: " + link_to_launch)
