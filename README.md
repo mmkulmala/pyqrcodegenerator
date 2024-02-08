@@ -13,7 +13,7 @@ First install needed libs and then create a text file with file names and text t
 
 ## File structure
 Text file that include what this app generates must have line structure as follows:
-name-to-be-included-under-qr-code, link-or-what-ever-this-qr-code-has-as-data, size-as-integer
+name-to-be-included-under-qr-code, link-or-what-ever-this-qr-code-has-as-data, scale-as-integer
 
 ### About sizes
 Size is not basically in inches or what ever it is the scale of qr-code. I usually use 4 to 12. But one can try different thing. Plus app calculates the place for text based on the scale.
