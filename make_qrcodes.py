@@ -21,8 +21,8 @@ def create_qrcodes(filename: str, font_file_name: str = "AmericanTypewriter.ttc"
     create_folder_if_not_exists()
     clear_folder()
 
-    with open(filename, encoding="utf-8") as artist_file:
-        for line in artist_file:
+    with open(filename, encoding="utf-8") as qrcodes_file:
+        for line in qrcodes_file:
             data_from_line = line.split(",")
             first_part_of_line = data_from_line[0]
             name_of_file = "./qrcodes/" + first_part_of_line + ".png"
