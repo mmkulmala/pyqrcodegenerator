@@ -76,6 +76,6 @@ curl http://127.0.0.1:8000/qrcodes/list
 curl http://127.0.0.1:8000/qrcodes/One.png
 ```
 
-### Notes:
-•  If you don’t provide a font, make_qrcodes.py defaults to AmericanTypewriter.ttc. If that font isn’t available on the host, uploads via font_file are recommended.
-•  Each generation run clears the qrcodes directory (per current make_qrcodes behavior). If you need to keep previous images or support concurrent generations without clearing, we can adjust behavior in a follow-up.
+### FastAPI Notes:
+*  If you don’t provide a font, make_qrcodes.py defaults to AmericanTypewriter.ttc. If that font isn’t available on the host, uploads via font_file are recommended.
+*  Each generation run clears the qrcodes directory (per current make_qrcodes behavior). If you need to keep previous images or support concurrent generations without clearing, we can adjust behavior in a follow-up.
