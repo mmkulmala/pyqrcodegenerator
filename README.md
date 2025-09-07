@@ -24,10 +24,16 @@ name-to-be-included-under-qr-code, link-or-what-ever-this-qr-code-has-as-data, s
 
 See example.of.qr-codes for little more.
 
-## Linting
+## Linting and testing
 To run local pylint, just type:
 ```bash
 ./lint.sh
+```
+
+To run tests:
+```bash
+python3 -m pip install -r requirements.txt pytest
+pytest -q --disable-warnings --maxfail=1
 ```
 
 ### About sizes
