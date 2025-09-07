@@ -12,12 +12,14 @@ import contextlib
 import glob
 import os
 import sys
+import tempfile
+import shutil
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile  # pylint: disable=import-error
+from fastapi.responses import JSONResponse  # pylint: disable=import-error
+from fastapi.staticfiles import StaticFiles  # pylint: disable=import-error
 
 # Ensure project root (where make_qrcodes.py lives) is importable
 BASE_DIR = Path(__file__).resolve().parent
@@ -54,7 +56,6 @@ def _write_text_to_tempfile(text: str, dir_path: Path) -> Path:
     """Persist provided text to a temporary file and return its path."""
     dir_path.mkdir(parents=True, exist_ok=True)
     # Use a predictable but unique filename
-    import tempfile
 
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, dir=dir_path) as tmp:
         tmp.write(text)
@@ -64,8 +65,6 @@ def _write_text_to_tempfile(text: str, dir_path: Path) -> Path:
 def _write_upload_to_tempfile(upload: UploadFile, dir_path: Path, suffix: str = "") -> Path:
     """Persist an uploaded file to a temporary path and return it."""
     dir_path.mkdir(parents=True, exist_ok=True)
-    import tempfile
-    import shutil
 
     with tempfile.NamedTemporaryFile("wb", suffix=suffix, delete=False, dir=dir_path) as tmp:
         # Avoid reading the entire file into memory if large
@@ -104,10 +103,16 @@ async def list_qrcodes() -> JSONResponse:
 @app.post("/qrcodes/generate")
 async def generate_qrcodes(
     # Provide either 'text' or 'input_file'
-    input_file: Optional[UploadFile] = File(None, description="Text file with lines: name, data, [scale]"),
+    input_file: Optional[UploadFile] = File(
+        None,
+        description="Text file with lines: name, data, [scale]",
+    ),
     text: Optional[str] = Form(None, description="Raw text containing lines: name, data, [scale]"),
     # Optional font: upload a .ttf/.ttc or pass a filesystem path available on server
-    font_file: Optional[UploadFile] = File(None, description="Font file (.ttf/.ttc) to render captions"),
+    font_file: Optional[UploadFile] = File(
+        None,
+        description="Font file (.ttf/.ttc) to render captions",
+    ),
     font_file_name: Optional[str] = Form(None, description="Server-side font file path"),
 ) -> JSONResponse:
     """Generate QR codes using the same logic as the CLI.
@@ -156,4 +161,3 @@ async def generate_qrcodes(
             except OSError:
                 # Non-fatal cleanup failure
                 pass
-
