@@ -1,23 +1,31 @@
-import segno
+"""Generate QR codes from a text file (name,data,optional scale) and overlay caption text."""
+
 import sys
 import os
 import glob
+
+import segno
 from PIL import Image, ImageDraw, ImageFont
 
-"""
-Create QR codes from a file with the specified filename and an optional font file name.
-"""
-def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
+def create_qrcodes(filename: str, font_file_name: str = "AmericanTypewriter.ttc") -> None:
+    """Create QR codes from lines in ``filename`` and optionally use a custom font.
+
+    The input file should contain CSV-like rows:
+        name, data, [scale]
+
+    - name: label to render below the QR code (also used as filename)
+    - data: string encoded into the QR code
+    - scale: optional integer scale for the QR image (default 4)
+    """
     get_qrcode_amount(filename)
     create_folder_if_not_exists()
     clear_folder()
 
-    with open(filename) as artist_file:
-        n = 1
+    with open(filename, encoding="utf-8") as artist_file:
         for line in artist_file:
             data_from_line = line.split(",")
             first_part_of_line = data_from_line[0]
-            name_of_file = './qrcodes/'+ first_part_of_line + '.png'
+            name_of_file = "./qrcodes/" + first_part_of_line + ".png"
             link_to_launch = data_from_line[1]
             font_size: int = 12
             text_position: int = 20
@@ -26,10 +34,13 @@ def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
                 qr_image_scale = int(data_from_line[2])
                 font_size = qr_image_scale * 3
                 text_position = int(font_size * 1.67)
-                print('>> Generating with image size: scale ' + str(qr_image_scale) + ' , font size ' + str(font_size) + ', text position ' + str(text_position))
+                print(
+                    f">> Generating with image size: scale {qr_image_scale}, "
+                    f"font size {font_size}, text position {text_position}"
+                )
             except IndexError:
-                print(">> Generating with default image size: scale 4, font size 12, text position 20")
-            print(">>> Generating: " + name_of_file + " that goes to: " + link_to_launch)
+                print(">> Using defaults: scale 4, font 12, text_pos 20")
+            print(f">>> Generating: {name_of_file} -> {link_to_launch}")
             qrcode = segno.make_qr(link_to_launch)
             qrcode.save(
                 name_of_file,
@@ -37,74 +48,54 @@ def create_qrcodes(filename, fontFileName='AmericanTypewriter.ttc'):
                 border=5,
                 light=None,
             )
-            add_caption(name_of_file, first_part_of_line, fontFileName, font_size, text_position)
-            n += 1
+            add_caption(
+                name_of_file,
+                first_part_of_line,
+                font_file_name,
+                font_size,
+                text_position,
+            )
 
-"""
-Calculate the number of qr-codes in the specified file.
-
-Args:
-    file_name (str): The name of the file containing the qr-codes.
-
-Returns:
-    None
-"""
-def get_qrcode_amount(file_name):
-    with open(file_name, 'r') as fp:
+def get_qrcode_amount(file_name: str) -> None:
+    """Print how many QR codes will be generated based on the input file lines."""
+    with open(file_name, "r", encoding="utf-8") as fp:
         x = len(fp.readlines())
-        print('####################################################')
-        print('# Generating ' + str(x) + ' qr-codes                            #')
-        print('####################################################')
+    print("####################################################")
+    print(f"# Generating {x} qr-codes                            #")
+    print("####################################################")
 
-"""
-Delete all qr-codes in the 'qrcodes' folder.
-"""
-def clear_folder():
-    files = glob.glob('./qrcodes/*.png')
-    for f in files:
-        os.remove(f)
+def clear_folder() -> None:
+    """Delete all QR code images in the 'qrcodes' folder."""
+    for path in glob.glob("./qrcodes/*.png"):
+        os.remove(path)
 
-"""
-Create a folder if it does not already exist.
-"""
-def create_folder_if_not_exists():
-    try:
-        os.makedirs("qrcodes")
-    except FileExistsError:
-        print(">>> qrcodes exists")
-        pass
+def create_folder_if_not_exists() -> None:
+    """Create the 'qrcodes' folder if it does not already exist."""
+    os.makedirs("qrcodes", exist_ok=True)
 
-"""
-Adds a caption to the specified image using the provided caption and font.
-
-Args:
-    caption_to (str): The path to the image to which the caption should be added.
-    caption_what (str): The text of the caption.
-    fontFileName (str): The path to the font file to be used for the caption.
-
-Returns:
-    None
-"""
-def add_caption(caption_to, caption_what, fontFileName, font_size, text_position):
+def add_caption(
+    caption_to: str,
+    caption_what: str,
+    font_file_name: str,
+    font_size: int,
+    text_position: int,
+) -> None:
+    """Add a caption to the image using the provided font."""
     image = Image.open(caption_to)
-    width, height = image.size
+    _, height = image.size
     draw = ImageDraw.Draw(image)
-    text_seat = caption_what
-    font = ImageFont.truetype(fontFileName, font_size)
-    draw.text((text_position,height - text_position), text_seat, font=font)
+    font = ImageFont.truetype(font_file_name, font_size)
+    draw.text((text_position, height - text_position), caption_what, font=font)
     image.save(caption_to)
 
-"""
-This function is the main entry point of the program. It checks the command line arguments
-and calls the create_qrcodes function with the appropriate parameters.
-"""
-def main():
-    if(len(sys.argv) < 2):
+def main() -> None:
+    """Parse CLI args and generate QR codes."""
+    if len(sys.argv) < 2:
         print("Usage: python3 make_qrcodes.py <artists-text-file> <optional-font-file-name>")
         sys.exit(1)
-    if(len(sys.argv) == 2):
+    elif len(sys.argv) == 2:
         create_qrcodes(sys.argv[1])
-    if(len(sys.argv) == 3):
+    else:
         create_qrcodes(sys.argv[1], sys.argv[2])
 
 if __name__ == "__main__":

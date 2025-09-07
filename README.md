@@ -24,5 +24,11 @@ name-to-be-included-under-qr-code, link-or-what-ever-this-qr-code-has-as-data, s
 
 See example.of.qr-codes for little more.
 
+## Linting
+To run local pylint, just type:
+```bash
+./lint.sh
+```
+
 ### About sizes
 Scale is not the size it is the scale of qr-code. I usually use 4 to 12. But one can try different thing. Notice that the app calculates the place for text based on the scale.
