@@ -11,9 +11,7 @@ This Python program uses following libs:
 ## How to use
 First thing is to have a venv and install reqs:
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+./setup.sh
 ```
 
 Running is as simple as: python3 make_qrcodes.py sometextfile.txt optional_font_file<.ttf/ttc>

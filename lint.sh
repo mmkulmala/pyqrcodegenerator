@@ -26,4 +26,3 @@ if [ -z "$FILES" ]; then
 fi
 
 exec .venv/bin/pylint "$@" $FILES
-
